@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.10)
 project(pcl_catkin)
+
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 find_package(catkin_simple REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem thread)
@@ -8,7 +10,7 @@ catkin_simple(ALL_DEPS_REQUIRED)
 
 include(ExternalProject)
 
-set(PCL_CATKIN_INCLUDE ${CATKIN_DEVEL_PREFIX}/include/pcl-1.10)
+set(PCL_CATKIN_INCLUDE ${CATKIN_DEVEL_PREFIX}/include/pcl-1.12.1)
 file(MAKE_DIRECTORY ${PCL_CATKIN_INCLUDE})
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -24,16 +26,17 @@ PCL_CHECK_FOR_SSE()
 
 # Flags that PCL defines by default, see https://github.com/PointCloudLibrary/pcl/blob/master/CMakeLists.txt#L112
 SET(PCL_CXX_FLAGS "-Wall -Wextra -Wno-unknown-pragmas -fno-strict-aliasing -Wno-format-extra-args -Wno-sign-compare -Wno-invalid-offsetof -Wno-conversion -DBOOST_UUID_RANDOM_GENERATOR_COMPAT ${SSE_FLAGS} -Wabi")
-SET(PCL_CXX_FLAGS "${PCL_CXX_FLAGS} -std=c++14")
+SET(PCL_CXX_FLAGS "${PCL_CXX_FLAGS} -std=c++17")
 
 ExternalProject_Add(pcl_src
   GIT_REPOSITORY  https://github.com/PointCloudLibrary/pcl
-  GIT_TAG pcl-1.10.1
+  GIT_TAG pcl-1.12.1
   UPDATE_COMMAND ""
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX}
              -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
              -DCMAKE_CXX_FLAGS:STRING=${PCL_CXX_FLAGS}
              -DPCL_SHARED_LIBS=TRUE
+             -DBUILD_GPU=ON
              "-DCMAKE_CXX_FLAGS_${UC_BUILD_TYPE}=${CMAKE_CXX_FLAGS_${UC_BUILD_TYPE}} ${PCL_CXX_FLAGS}"
 )
 
