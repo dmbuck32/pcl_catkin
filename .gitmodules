@@ -1,7 +1,8 @@
 [submodule "perception_pcl"]
 	path = perception_pcl
-	url = https://github.com/ros-perception/perception_pcl
+	url = https://github.com/ros-perception/perception_pcl.git
+	branch = melodic-devel
 [submodule "geometry2"]
 	path = geometry2
 	url = https://github.com/ros/geometry2.git
-	branch = origin/noetic-devel
+	branch = noetic-devel
